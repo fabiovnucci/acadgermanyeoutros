@@ -53,15 +53,19 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
             object-fit: cover;
         }
-        .titulo-degrade-elevado {
-            font-size: 3rem;
-            font-weight: 900;
-            background: linear-gradient(to right, gold, orange, crimson, black);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            -webkit-text-stroke: 3px black;
-            color: gold;
-        }
+    
+ .titulo-degrade-elevado {
+    font-size: 3rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, gold, orange, crimson, darkred);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: gold; /* Fallback */
+    
+    /* Sombra sutil */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
         .social-icons a {
             color: white;
             margin: 0 10px;
