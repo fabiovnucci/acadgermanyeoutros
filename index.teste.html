@@ -21,7 +21,39 @@
         body {
             font-family: 'Poppins', sans-serif;
             font-size: 18px;
+            transition: all 0.3s ease;
         }
+        /* Estilos para o modo noturno */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .dark-mode .hero {
+            filter: contrast(110%) brightness(85%);
+        }
+        .dark-mode .bg-gradient-custom {
+            background: linear-gradient(to bottom, #121212, #1a1a1a, #2a2a2a);
+        }
+        .dark-mode .horario-card {
+            background: rgba(30, 30, 30, 0.9);
+            border: 2px solid #555;
+        }
+        .dark-mode .horario-header {
+            background: linear-gradient(45deg, #555, #777);
+        }
+        .dark-mode .navbar {
+            background-color: #1a1a1a !important;
+        }
+        .dark-mode .location-info {
+            color: #e0e0e0;
+        }
+        .dark-mode-toggle {
+            cursor: pointer;
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+        }
+        /* Restante do seu CSS original */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), 
                         url('10.png') center center/cover no-repeat;
@@ -53,7 +85,6 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
             object-fit: cover;
         }
-    
         .titulo-degrade-elevado {
             font-size: 3rem;
             font-weight: 900;
@@ -62,8 +93,6 @@
             background-clip: text;
             -webkit-text-fill-color: transparent;
             color: gold; /* Fallback */
-            
-            /* Sombra sutil */
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         .social-icons a {
@@ -76,31 +105,38 @@
             margin-bottom: 100px;
             margin-top: 50px;
         }
-        
-        /* Estilização específica para os cards de horário */
         .horario-card {
             background: rgba(0, 0, 0, 0.7);
             border: 2px solid #DAA520;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
         }
-        
         .horario-header {
             background: linear-gradient(45deg, #DAA520, #FFD700);
             border-radius: 8px 8px 0 0;
             padding: 15px;
         }
-        
         .location-info {
             color: white;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
+
+        .navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+}
+
+.dark-mode-toggle {
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+}
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-black sticky-top">
         <div class="container">
-            <a class="navbar-brand " href="#"><strong>Academia Germany Fitness</strong></a>
+            <a class="navbar-brand" href="#"><strong>Academia Germany Fitness</strong></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -110,11 +146,20 @@
                     <li class="nav-item"><a class="nav-link text-white" href="#estrutura"><strong>Estrutura</strong></a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="#horario"><strong>Horários</strong></a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="#contato"><strong>Contato</strong></a></li>
+                    <li class="nav-item">
+                        <li class="nav-item d-flex align-items-center">
+    <div class="dark-mode-toggle" id="darkModeToggle">
+        <i class="bi bi-moon-fill text-white"></i>
+        <span class="ms-1 text-white">Modo Escuro</span>
+    </div>
+</li>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav> 
 
+    <!-- Restante do seu HTML original permanece o mesmo -->
     <header class="hero">
         <div class="container">
             <h1 class="titulo-degrade-elevado">Academia Germany Fitness</h1>
@@ -237,15 +282,13 @@
         <section id="contato" class="container py-5">
             <h2 class="text-white-outline text-center mb-4">Contato</h2>
             <div class="text-center my-5">
-    <a href="https://www.instagram.com/academiagermanyfitness/" 
-       target="_blank" 
-       rel="noopener noreferrer" 
-       aria-label="Siga-nos no Instagram">
-    
-        <i class="bi bi-instagram fs-1 text-black bg-gradient p-3 rounded-circle shadow-lg " style="background: linear-gradient(45deg, #f18f25 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#e7049f 100%) "></i>
-    </a>
-</div>
-            
+                <a href="https://www.instagram.com/academiagermanyfitness/" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   aria-label="Siga-nos no Instagram">
+                    <i class="bi bi-instagram fs-1 text-black bg-gradient p-3 rounded-circle shadow-lg" style="background: linear-gradient(45deg, #f18f25 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#e7049f 100%)"></i>
+                </a>
+            </div>
             
             <div class="text-center">
                 <iframe 
@@ -279,5 +322,34 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Função para alternar o modo noturno
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            
+            // Atualiza o ícone e texto
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            if (isDarkMode) {
+                darkModeToggle.innerHTML = '<i class="bi bi-sun-fill text-white"></i><span class="ms-1 text-white">Modo Claro</span>';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                darkModeToggle.innerHTML = '<i class="bi bi-moon-fill text-white"></i><span class="ms-1 text-white">Modo Escuro</span>';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+        
+        // Verifica preferência salva
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeToggle').innerHTML = '<i class="bi bi-sun-fill text-white"></i><span class="ms-1 text-white">Modo Claro</span>';
+            }
+            
+            // Adiciona evento de clique
+            document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+        });
+    </script>
 </body>
 </html>
