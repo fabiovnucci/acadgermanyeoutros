@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letreiro Motivacional</title>
+    <style>
+        .letreiro-container {
+            height: 100px;
+            overflow: hidden;
+            position: relative;
+            margin: 30px auto;
+            max-width: 90%;
+            background: rgba(0,0,0,0.7);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .letreiro-motivacional {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            padding: 30px 20px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            top: 0;
+        }
+        
+        .letreiro-motivacional.ativo {
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .letreiro-motivacional {
+                font-size: 1.4rem;
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="letreiro-container" id="letreiroContainer">
+    <!-- As frases serão inseridas aqui pelo JavaScript -->
+</div>
+
+<script>
+    // Configuração completa do letreiro
+    const configLetreiro = {
+        // Frases e duração em dias para a mudança programada
+        frases: [
+            {
+                texto: "FRASE 1: Cada treino te aproxima do seu objetivo!",
+                duracaoDias: 3 // Duração em dias para a mudança programada
+            },
+            {
+                texto: "FRASE 2: A consistência é a chave do sucesso!",
+                duracaoDias: 3
+            },
+            {
+                texto: "FRASE 3: Hoje é dia de ser melhor que ontem!",
+                duracaoDias: 3
+            },
+            {
+                texto: "FRASE 4: Sua força mental determina seu limite físico!",
+                duracaoDias: 3
+            }
+        ],
+        
+        // Configuração da animação (tempo em segundos)
+        animacao: {
+            tempoExibicao: 5, // Tempo que cada frase fica visível (segundos)
+            tempoTransicao: 1  // Duração do efeito de fade (segundos)
+        }
+    };
+
+    // Inicialização do letreiro
+    function iniciarLetreiro() {
+        const container = document.getElementById('letreiroContainer');
+        let frasesAtivas = [];
+        
+        // 1. Verifica a mudança programada por dias
+        const agora = new Date();
+        let indiceProgramado = 0;
+        
+        if(localStorage.getItem('letreiroData')) {
+            const ultimaMudanca = new Date(localStorage.getItem('letreiroData'));
+            const indiceAtual = parseInt(localStorage.getItem('letreiroIndice'));
+            const diasDecorridos = Math.floor((agora - ultimaMudanca) / (1000 * 60 * 60 * 24));
+            const duracaoAtual = configLetreiro.frases[indiceAtual].duracaoDias;
+            
+            if(diasDecorridos >= duracaoAtual) {
+                indiceProgramado = (indiceAtual + 1) % configLetreiro.frases.length;
+                localStorage.setItem('letreiroData', agora.toString());
+                localStorage.setItem('letreiroIndice', indiceProgramado.toString());
+            } else {
+                indiceProgramado = indiceAtual;
+            }
+        } else {
+            localStorage.setItem('letreiroData', agora.toString());
+            localStorage.setItem('letreiroIndice', '0');
+        }
+        
+        // 2. Cria as frases no DOM a partir do índice programado
+        configLetreiro.frases.forEach((frase, index) => {
+            const div = document.createElement('div');
+            div.className = 'letreiro-motivacional';
+            div.textContent = frase.texto;
+            div.dataset.indice = index;
+            container.appendChild(div);
+            
+            // Adiciona à lista de frases ativas (começando pela programada)
+            if(index >= indiceProgramado) {
+                frasesAtivas.push(div);
+            }
+        });
+        
+        // Adiciona as frases anteriores para completar o loop
+        for(let i = 0; i < indiceProgramado; i++) {
+            frasesAtivas.push(document.querySelector(`.letreiro-motivacional[data-indice="${i}"]`));
+        }
+        
+        // 3. Animação do letreiro
+        let indiceAtual = 0;
+        frasesAtivas[0].classList.add('ativo');
+        
+        setInterval(() => {
+            // Remove a classe da frase atual
+            frasesAtivas[indiceAtual].classList.remove('ativo');
+            
+            // Avança para a próxima frase
+            indiceAtual = (indiceAtual + 1) % frasesAtivas.length;
+            
+            // Adiciona classe à nova frase ativa
+            frasesAtivas[indiceAtual].classList.add('ativo');
+        }, configLetreiro.animacao.tempoExibicao * 1000);
+    }
+
+    // Inicia o letreiro quando a página carregar
+    window.addEventListener('DOMContentLoaded', iniciarLetreiro);
+</script>
+
+</body>
+</html>
